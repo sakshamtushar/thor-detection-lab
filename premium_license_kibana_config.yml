@@ -1,0 +1,38 @@
+xpack.encryptedSavedObjects.encryptionKey: "thirty-two-or-more-random-characters"
+server.host: "0.0.0.0"
+telemetry.enabled: "true"
+xpack.fleet.packages:
+  - name: fleet_server
+    version: latest
+  - name: system
+    version: latest
+xpack.fleet.agentPolicies:
+  - name: Fleet-Server-Policy
+    id: fleet-server-policy
+    is_default_fleet_server: "true"
+    namespace: default
+    data_output_id: elastic-output
+    monitoring_output_id: elastic-output
+    package_policies:
+      - name: fleet_server-1
+        package:
+          name: fleet_server
+xpack.fleet.outputs:
+  - id: logstash-output
+    name: Logstash-Output
+    type:  logstash
+    hosts: ["192.168.0.108:5044"]
+    ssl:
+      certificate: /usr/share/kibana/config/certs/logstash/logstash-client.crt
+      certificate_authorities: ["/usr/share/kibana/config/certs/ca/ca.crt"]
+    secrets:
+      ssl:
+        key: /usr/share/kibana/config/certs/logstash/logstash-client.key
+  - id: elastic-output
+    name: Elastic-Output
+    is_default: "true"
+    type:  elasticsearch
+    hosts: ["https://192.168.0.108:9200"]
+    ssl:
+      certificate_authorities: ["/usr/share/kibana/config/certs/ca/ca.crt"]
+

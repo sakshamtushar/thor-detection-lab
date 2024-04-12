@@ -1,0 +1,46 @@
+
+Steps : 
+Running Splunk : 
+- Execute "docker-compose -f splunk-compose.yml up -d" to get the container started
+- Setup HEC  [Splunk Setup HTTP Event Collector in Data Inputs], get & save token
+- Disable SSL in Global Settings of HTTP Event Collector. 
+
+Test Splunk ingestion : 
+http://{IP-addr}/services/collector -H 'Authorization: Splunk da3d59c4-8509-405b-982b-1bc6e966aad1' -d '{"event":"Hello, World!"}'
+  curl http://192.168.0.108:8088/services/collector/event/ -H "Authorization: Splunk token" -d '{
+"event": { "stuff": "value" } }'
+
+
+Setting up Elasticsearch, Kibana, Fleet-server, logstash
+- Replace IP address in .env File and on docker-compose.sh file[in elasticsearch-setup container service] for correct certificate generation.
+- Replace IP in URL and Splunk token in logstash.conf file for logstash to load correct values.
+- Run by executing "./elastic-container.sh start" 
+- Wait for it to complete. 
+- Fix Settings in the fleet settings in Kibana : 
+  - Get the root certificate value : docker exec  ecp-elasticsearch cat /usr/share/elasticsearch/config/certs/ca/ca.crt
+  - Paste Certificate in Elasticsearch advanced yaml configuration section in format as mentioned here  * 
+  - Fix IP Address if it shows Localhost, Change it your Elastic-search instance IP. 
+
+Create logstash Ouptut settings
+- Get the Logstash Client Cert value : docker exec  ecp-elasticsearch cat /usr/share/elasticsearch/config/certs/logstash-client/logstash-client.crt
+- Get the Logstash Client key value : docker exec  ecp-elasticsearch cat /usr/share/elasticsearch/config/certs/logstash-client/logstash-client.key
+Make Logstash Default output
+Create Agent policy
+Install the Agent 
+
+
+* Format for certificate in advanced Configuration : 
+
+ssl: 
+  certificate_authoritied:
+  - | 
+    Certificate 
+    .
+    .
+    .
+    .
+    .
+    .
+    .
+    .
+    .
