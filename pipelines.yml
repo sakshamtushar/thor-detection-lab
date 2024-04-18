@@ -1,0 +1,2 @@
+- pipeline.id: elastic-agent-pipeline
+  path.config: "/usr/share/logstash/pipeline/logstash.conf"
