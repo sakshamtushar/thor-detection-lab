@@ -1,0 +1,26 @@
+version: '2'
+
+volumes:
+  opt-splunk-etc: {}
+  opt-splunk-var: {}
+
+services:
+  splunkenterprise:
+    container_name: splunk-thorlab
+    hostname: splunkenterprise
+    image: splunk/splunk:latest
+    mem_limit: 8G
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_ENABLE_LISTEN=9997
+      - SPLUNK_ADD=tcp 1514
+      - SPLUNK_PASSWORD=Saksham@80100
+      - SPLUNK_ENABLE_SSL=false
+    volumes:
+      - opt-splunk-etc:/opt/splunk/etc
+      - opt-splunk-var:/opt/splunk/var
+    ports:
+      - "8000:8000"
+      - "9997:9997"
+      - "8088:8088"
+      - "1514:1514"
