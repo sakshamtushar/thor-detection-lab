@@ -4,7 +4,7 @@
 
 #docker-compose -f spllunk-compose_v2.yml up -d
 SPLUNK_URL="https://192.168.0.108:8089"
-PASSWORD="Saksham@80100"
+PASSWORD="thor-lab@123"
 INDEX="main" 
 ENDPOINT="${SPLUNK_URL}/services/data/inputs/http/"
 

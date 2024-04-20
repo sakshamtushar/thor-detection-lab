@@ -13,7 +13,7 @@ services:
       SPLUNK_START_ARGS: --accept-license
       SPLUNK_ENABLE_LISTEN: 9997
       SPLUNK_ADD: tcp 1514
-      SPLUNK_PASSWORD: Saksham@80100
+      SPLUNK_PASSWORD: thor-lab@123
       SPLUNK_ENABLE_SSL: "false"
     volumes:
       - opt-splunk-etc:/opt/splunk/etc
