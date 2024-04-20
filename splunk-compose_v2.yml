@@ -1,4 +1,4 @@
-version: '2'
+version: '2.4'
 
 volumes:
   opt-splunk-etc: {}
@@ -15,7 +15,6 @@ services:
       - SPLUNK_ENABLE_LISTEN=9997
       - SPLUNK_ADD=tcp 1514
       - SPLUNK_PASSWORD=Saksham@80100
-      - SPLUNK_ENABLE_SSL=false
     volumes:
       - opt-splunk-etc:/opt/splunk/etc
       - opt-splunk-var:/opt/splunk/var
@@ -24,3 +23,4 @@ services:
       - "9997:9997"
       - "8088:8088"
       - "1514:1514"
+      - "8089:8089"
