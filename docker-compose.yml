@@ -211,6 +211,7 @@ services:
      - ELASTIC_USER=elastic
      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
      - ELASTIC_HOSTS=https://ecp-elasticsearch:9200
+     - SPLUNK_TOKEN=${SPLUNK_TOKEN}
 
 
 
