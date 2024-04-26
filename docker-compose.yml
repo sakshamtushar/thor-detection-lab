@@ -30,31 +30,31 @@ services:
           "      - ecp-elasticsearch\n"\
           "      - localhost\n"\
           "    ip:\n"\
-          "      - 192.168.0.108\n"\
+          "      - 192.168.0.138\n"\
           "  - name: kibana\n"\
           "    dns:\n"\
           "      - ecp-kibana\n"\
           "      - localhost\n"\
           "    ip:\n"\
-          "      - 192.168.0.108\n"\
+          "      - 192.168.0.138\n"\
           "  - name: fleet-server\n"\
           "    dns:\n"\
           "      - ecp-fleet-server\n"\
           "      - localhost\n"\
           "    ip:\n"\
-          "      - 192.168.0.108\n"\
+          "      - 192.168.0.138\n"\
           "  - name: logstash\n"\
           "    dns:\n"\
           "      - ecp-logstash\n"\
           "      - localhost\n"\
           "    ip:\n"\
-          "      - 192.168.0.108\n"\
+          "      - 192.168.0.138\n"\
           "  - name: logstash-client\n"\
           "    dns:\n"\
           "      - ecp-logstash-client\n"\
           "      - localhost\n"\
           "    ip:\n"\
-          "      - 192.168.0.108\n"\
+          "      - 192.168.0.138\n"\
           > config/certs/instances.yml;
           bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
           unzip config/certs/certs.zip -d config/certs;
@@ -108,8 +108,8 @@ services:
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.client_authentication=optional
       - xpack.license.self_generated.type=${LICENSE}
-      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
-    mem_limit: 8589934592
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    mem_limit: 4294967296
     ulimits:
       memlock:
         soft: -1
