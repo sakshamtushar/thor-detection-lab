@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 #docker-compose -f splunk-compose_v2.yml up -d
@@ -7,6 +6,8 @@ PASSWORD="thor-lab@123"
 INDEX="main" 
 ENDPOINT="${SPLUNK_URL}/services/data/inputs/http/"
 
+#disable SSL in HEC Global Settings
+curl -k -u admin:$PASSWORD $SPLUNK_URL/servicesNS/nobody/search/data/inputs/http/http -d  enableSSL=0
 # Create the JSON payload for the HEC collector
 response=$(curl -k -u admin:$PASSWORD $SPLUNK_URL/servicesNS/nobody/search/data/inputs/http -d name=elastic-input-test -d index=main -d indexes=main)
 if echo "$response" | grep -q '"token"'; then
