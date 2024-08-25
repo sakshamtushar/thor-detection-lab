@@ -1,6 +1,6 @@
 # Thor (Threat Detection & Open Research) - Threat Detection Lab
 
-## overview: |
+## overview: 
   The Thor Detection Lab is a modular and scalable environment designed for security professionals to deploy, test, and analyze various security tools and technologies. This lab provides Docker-based deployments of several key security tools such as Splunk, Elastic SIEM, Cribl, n8n SOAR, and Shuffle.
 
 ## features:
@@ -30,7 +30,7 @@
     ```bash
       ./configurator.sh
   - step: Follow the On-Screen Prompts
-    details: |
+    details: 
       The script will prompt you to select which tool you want to deploy:
       - Press `1` for Splunk
       - Press `2` for Elastic SIEM
@@ -39,7 +39,7 @@
       - Press `5` for Shuffle
       - Press `6` to exit
   - step: Access the Tool
-    details: |
+    details: 
       Once the tool is deployed, you can access it via its respective web interface (if applicable). The script will inform you of the relevant URLs and ports.
 
 ## notes:
