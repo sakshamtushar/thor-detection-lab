@@ -1,42 +1,74 @@
 #!/bin/bash
-#sudo apt-get install docker-compose
-docker-compose -f splunk-compose_v2.yml up -d
 
-get_health_status() {
-    docker inspect --format='{{.State.Health.Status}}' "splunk-thorlab"
+# Function to check if a container is already running
+is_container_running() {
+  local tool_name=$1
+  docker ps --format '{{.Names}}' | grep -q "$tool_name"
 }
-while true; do
-    health_status=$(get_health_status)
-    if [[ "$health_status" == "healthy" ]];  # Check if health status is "healthy"
-    then
-        echo "Container 'splunk-thorlab' is healthy."
-        break
+
+# Function to spin up the tool using docker-compose
+spin_up_tool() {
+  local tool_name=$1
+  local tool_dir=$2
+  
+  if [ -d "$tool_dir" ]; then
+    echo "Navigating to $tool_dir..."
+    cd "$tool_dir"
+    
+    if [ -f "docker-compose.yml" ]; then
+      # Extract the service name from the docker-compose file
+      local service_name=$(docker-compose config --services | head -n 1)
+      
+      if is_container_running "$service_name"; then
+        echo "$tool_name is already running."
+      else
+        echo "Spinning up $tool_name..."
+        docker-compose up -d
+        echo "$tool_name is now running."
+      fi
     else
-        echo "Waiting for container 'splunk' to become healthy (current status: $health_status)."
-        # Wait for 5 seconds before checking again
-        sleep 5
+      echo "Error: docker-compose.yml not found in $tool_dir."
     fi
-done
+    
+    # Navigate back to the original directory
+    cd - > /dev/null
+  else
+    echo "Error: Directory $tool_dir does not exist."
+  fi
+}
 
-echo "configuring splunk HEC & Disabling HEC Global SSL Configuration..."
-SPLUNK_URL="https://192.168.0.138:8089"
-PASSWORD="thor-lab@123"
-INDEX="main" 
-ENDPOINT="${SPLUNK_URL}/services/data/inputs/http/"
+# Main script execution
+echo "Choose a tool to spin up:"
+echo "1) Splunk"
+echo "2) Elastic SIEM"
+echo "3) Cribl"
+echo "4) n8n SOAR"
+echo "5) Shuffle"
+echo "6) Exit"
 
-#disable SSL in HEC Global Settings
-curl -k -u admin:$PASSWORD $SPLUNK_URL/servicesNS/nobody/search/data/inputs/http/http -d  enableSSL=0
-# Create the JSON payload for the HEC collector
-response=$(curl -k -u admin:$PASSWORD $SPLUNK_URL/servicesNS/nobody/search/data/inputs/http -d name=elastic-input-test -d index=main -d indexes=main)
-if echo "$response" | grep -E -q 'token|already'; then
-    # Extract the token from the response
-    token=$(echo "$response" | grep token | cut -d '>' -f 2  | cut -d '<' -f 1)
-    echo "HEC token created successfully: $token"
-    echo "SPLUNK_TOKEN=$token" >> .env
+read -p "Enter the number corresponding to your choice: " choice
 
-else
-    echo "Failed to create HEC collector: $response"
-    exit
-fi
-echo "Setting up & Configuring Elastic"
-./elastic-container.sh start
+case $choice in
+  1)
+    spin_up_tool "Splunk" "splunk"
+    ;;
+  2)
+    spin_up_tool "Elastic SIEM" "elastic-siem"
+    ;;
+  3)
+    spin_up_tool "Cribl" "cribl"
+    ;;
+  4)
+    spin_up_tool "n8n SOAR" "n8n-soar"
+    ;;
+  5)
+    spin_up_tool "Shuffle" "shuffle"
+    ;;
+  6)
+    echo "Exiting the script."
+    exit 0
+    ;;
+  *)
+    echo "Invalid choice. Please select a valid option."
+    ;;
+esac
